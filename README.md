@@ -86,10 +86,8 @@ sign-language-detector/
 ```
 
 ---
+## 🎥 Demo Video
+Watch the project in action below 👇
 
-## 🤝 Contributing & Future Scope
-- [ ] Add support for temporal gestures (gestures with movement).
-- [ ] Implement an FPS counter for performance monitoring.
-- [ ] UI themes (Light/Dark mode) for the detection window.
 
-**Author:** [Niloy Jana](https://github.com/niloyjana)
+https://github.com/user-attachments/assets/8a9d09db-ca53-4e57-93b2-0bb34aa26a66
