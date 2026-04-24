@@ -1,4 +1,4 @@
-# 🖐️ Real-Time Sign Language & Gesture Detector
+#  Real-Time Sign Language & Gesture Detector
 
 A professional-grade real-time hand gesture recognition system built with **Python**, **OpenCV**, **MediaPipe**, and **Scikit-Learn**. 
 
