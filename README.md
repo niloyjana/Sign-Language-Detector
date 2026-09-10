@@ -1,91 +1,74 @@
-# 🤟 Sign Language Detector
+# Sign Language Detector — Real-Time Hand Gesture Recognition
 
-A real-time hand-gesture / sign-language recognizer built with **OpenCV**, **MediaPipe**, and **scikit-learn**. It tracks your hand through a webcam, extracts hand-landmark keypoints, and classifies the gesture using a trained SVM model — showing the prediction and confidence live on screen.
+Sign Language Detector is a real-time hand-gesture recognition system built with OpenCV, MediaPipe, and scikit-learn. It tracks your hand through a webcam, extracts hand-landmark keypoints, and classifies the gesture using a trained SVM model, displaying the prediction and confidence live on screen.
 
-## 🚀 How It Works
+---
 
-The pipeline has three stages:
+## Key Features
 
-1. **Collect images** — capture labeled photos of hand signs from your webcam.
-2. **Build a dataset** — extract 2D hand-landmark keypoints (via MediaPipe) from each image and save them as a pickled dataset.
-3. **Train & run** — train an SVM classifier on the keypoints, then run it live for real-time gesture recognition, complete with a bounding box, left/right hand label, and confidence score overlay.
+- **Hand Landmark Tracking**: Uses MediaPipe Hands to detect 21 keypoints per hand in real time, for up to 2 hands simultaneously.
+- **Custom Dataset Collection**: Built-in webcam tool to capture and label your own hand-sign images for any gesture set.
+- **SVM Classification**: Trains a linear-kernel SVM on extracted landmark coordinates for lightweight, fast inference.
+- **Live Inference Overlay**: Displays a bounding box, hand side (Left/Right), predicted gesture, and confidence score directly on the video feed.
 
-## 🛠️ Tech Stack
+---
 
-- **OpenCV** – webcam capture & UI rendering
-- **MediaPipe Hands** – hand landmark detection (21 keypoints per hand)
-- **scikit-learn (SVM)** – gesture classification
-- **NumPy / Pandas** – data handling
-
-## 📂 Project Structure
+## Project Structure
 
 ```text
 Sign-Language-Detector/
 ├── collect_imgs.py       # Step 1: capture labeled hand-sign images from webcam
-├── create_dataset.py     # Step 2: extract MediaPipe landmarks → dataset.p
-├── train_classifier.py   # Step 3: train an SVM on dataset.p → model.p
+├── create_dataset.py     # Step 2: extract MediaPipe landmarks into dataset.p
+├── train_classifier.py   # Step 3: train an SVM on dataset.p, save model.p
 ├── run_inference.py      # Step 4: real-time webcam gesture recognition
 ├── dataset.p             # Pickled (landmarks, labels) dataset
 ├── model.p               # Pickled trained SVM model
-└── requirements.txt
+└── requirements.txt      # System dependencies
 ```
 
-## ⚙️ Getting Started
+---
 
-### Prerequisites
+## Installation & Setup
 
-- Python 3.8–3.10 (MediaPipe compatibility)
-- A webcam
-
-### Installation
-
+### 1. Clone the Repository
 ```bash
 git clone https://github.com/niloyjana/Sign-Language-Detector.git
 cd Sign-Language-Detector
+```
+
+### 2. Environment Setup
+We recommend using a virtual environment (Python 3.8–3.10, for MediaPipe compatibility):
+```bash
 python -m venv venv
-source venv/bin/activate      # On Windows: venv\Scripts\activate
+source venv/bin/activate  # Windows: .\venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### Usage
+---
 
-**1. Collect training images**
+## Recognition Pipeline
 
-Run this once per sign/label you want to teach the model:
+1. **Image Collection**: `collect_imgs.py` prompts for a label and opens your webcam — press S to save a frame, Q to quit. Images are saved to `data/<label>/`.
+2. **Landmark Extraction**: `create_dataset.py` runs MediaPipe Hands over every collected image and stores the (x, y) coordinates of all 21 landmarks per sample in `dataset.p`.
+3. **Model Training**: `train_classifier.py` splits the dataset 80/20, trains a linear-kernel SVM, prints test accuracy, and saves the model to `model.p`.
+4. **Real-Time Inference**: `run_inference.py` opens the webcam, tracks hands live, and overlays the predicted gesture with confidence and hand side for each detected hand.
 
-```bash
-python collect_imgs.py
-```
+---
 
-You'll be prompted for a label (e.g. `A`). A webcam window opens — press **S** to save a frame, **Q** to quit. Images are saved to `data/<label>/`.
+## Custom Training
 
-**2. Build the dataset**
+You can train the detector on your own sign set:
+1. Run `collect_imgs.py` once per label you want to teach the model.
+2. Run:
+   ```bash
+   python create_dataset.py
+   python train_classifier.py
+   ```
+3. Run `python run_inference.py` to test live.
 
-Extracts hand-landmark keypoints from every collected image:
+---
 
-```bash
-python create_dataset.py
-```
-
-This produces `dataset.p`.
-
-**3. Train the classifier**
-
-```bash
-python train_classifier.py
-```
-
-Trains an SVM (linear kernel) on an 80/20 train-test split, prints accuracy, and saves `model.p`.
-
-**4. Run real-time detection**
-
-```bash
-python run_inference.py
-```
-
-Opens your webcam, tracks up to 2 hands, and overlays the predicted gesture with confidence and hand side (Left/Right). Press **Esc** to quit.
-
-## 📦 Requirements
+## Requirements
 
 ```text
 opencv-python==4.8.1.78
@@ -96,11 +79,6 @@ protobuf<4
 pandas
 ```
 
-## 📝 Notes
+---
 
-- `dataset.p` and `model.p` are already included in the repo (pre-trained), but you can regenerate them by re-running steps 1–3 with your own signs/labels.
-- Detection confidence and tracking confidence thresholds can be tuned in `run_inference.py` (`min_detection_confidence`, `min_tracking_confidence`).
-
-## 📝 License
-
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+Developed as a computer vision project for real-time sign language recognition.
